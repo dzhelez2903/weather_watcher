@@ -7,7 +7,7 @@
             type="text"
             placeholder="search..."
             v-model="query"
-            v-on:keypress="fetchWeather"
+            @keypress="fetchWeather"
         />
       </div>
       <div class="weather" v-if="typeof weather.main != 'undefined'">
@@ -30,7 +30,6 @@
 
 <script>
 
-
 export default {
   name: 'App',
   data() {
@@ -43,13 +42,21 @@ export default {
     }
   },
   methods: {
+
     fetchWeather (e) {
-      if (e.key == "Enter") {
-        fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}&lang={this.language}`)
+      if (e.key === "Enter") {
+        setInterval(async ()=> {
+          const f = await fetch("${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}&lang={this.language}")
+          weather = await f.json();
+          console.log(weather);
+        }, 3000);
+
+        /*fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}&lang={this.language}`)
             .then(res => {
               return res.json();
-            }).then(this.setResults);
+            }).then(this.setResults);*/
       }
+
     },
     setResults (results) {
       this.weather = results;
@@ -64,6 +71,7 @@ export default {
       let year = d.getFullYear();
       return `${day} ${date} ${month} ${year}`;
     }
+
   }
 }
 </script>
@@ -89,7 +97,6 @@ body {
   background-size: cover;
   background-position: bottom;
   transition: 0.5s;
-
 
   .main {
     min-height: 100vh;
