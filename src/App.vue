@@ -45,21 +45,22 @@ export default {
 
     fetchWeather (e) {
       if (e.key === "Enter") {
-        setInterval(async ()=> {
-          const f = await fetch("${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}&lang={this.language}")
-          weather = await f.json();
-          console.log(weather);
-        }, 3000);
-
-        /*fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}&lang={this.language}`)
+        fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}&lang={this.language}`)
             .then(res => {
               return res.json();
-            }).then(this.setResults);*/
-      }
+            }).then(this.setResults);
 
+        setInterval(async ()=> {
+          fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}&lang={this.language}`)
+              .then(res => {
+                return res.json();
+              }).then(this.setResults);
+        }, 300000);
+      }
     },
     setResults (results) {
       this.weather = results;
+      console.log(results)
     },
     dateBuilder () {
       let d = new Date();
